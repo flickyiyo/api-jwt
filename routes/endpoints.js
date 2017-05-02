@@ -5,7 +5,7 @@ var createtoken = require('./createToken');
 var moments = require('moment');
 var cors = require('cors');
 var secret = require('../config/tokensecret').secret;
-
+var controller = require('../controllers/controller');
 var collection;
 var MongoClient = require('mongodb').MongoClient;
 MongoClient.connect('mongodb://localhost:27017/mi-database',function(err,db){
@@ -36,22 +36,5 @@ function ensureAuthorized(req,res,next){
         }
     }
 }
-router.get('/productos',cors(),function(req,res){
-    'use strict'
-    collection.find().toArray(function(err,items){
-        var resultado;
-        if(!err){
-            resultado = {
-                status:200,
-                result:items
-            }
-        }else{
-            resultado = {
-                status:500,
-                result:err
-            }
-        }
-        res.set('Content-Type','application/json').send(JSON.stringify(resultado));
-    })
-})
+router.get('/productos',cors(),controller.getAll);//*/
 module.exports = router;
